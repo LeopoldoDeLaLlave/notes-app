@@ -18,12 +18,16 @@ notesCtlr.renderNotes = async(req, res)=>{
     res.render('notes/all-notes', {notes});
 };
 
-notesCtlr.renderEditForm = (req, res)=>{
-    res.send('Edit form');
+notesCtlr.renderEditForm = async(req, res)=>{
+    const note  = await Note.findById(req.params.id).lean();
+    console.log(note);
+    res.render('notes/edit-note.hbs',{note});
 };
 
-notesCtlr.updateNote = (req, res)=>{
-    res.send('Update note');
+notesCtlr.updateNote = async(req, res)=>{
+    const{title,description}= req.body;
+    await Note.findByIdAndUpdate(req.params.id, {title, description});
+    res.redirect('/notes');
 };
 
 notesCtlr.deleteNote = async(req, res)=>{
